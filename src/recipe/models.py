@@ -1,9 +1,10 @@
 from django.db import models
 from datetime import datetime
-
+from people.models import People
 
 class Recipe(models.Model):
 
+    person             = models.ForeignKey(People, on_delete=models.CASCADE)
     recipe_name        = models.CharField(max_length=200)
     category           = models.CharField(max_length=100)
     ingredients        = models.TextField()
