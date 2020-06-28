@@ -67,3 +67,7 @@ def dashboard_view(request):
         return render(request, template_name='users/dashboard.html')
     else:
         return redirect(to='index')
+
+def create_recipe_view(request):
+
+    return render(request, template_name='users/create_recipe.html')
