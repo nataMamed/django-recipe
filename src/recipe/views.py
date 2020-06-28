@@ -20,3 +20,16 @@ def recipe_view(request, recipe_id):
     }
 
     return render(request, template_name='recipe.html', context=recipe_to_show)
+
+def search_view(request):
+
+    recipe_list = Recipe.objects.order_by('-registration_date').filter(published=True)
+    if 'search' in request.GET:
+        recipe_to_find = request.GET['search']
+        if search_view:
+            recipe_list = recipe_list.filter(recipe_name__icontains=recipe_to_find)
+
+    data = {    
+        'recipes': recipe_list
+    }
+    return render(request, template_name='search.html', context=data)
