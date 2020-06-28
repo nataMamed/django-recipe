@@ -13,10 +13,10 @@ def login_view(request):
 
 
 def logout_view(request):
-
-    return render(request, template_name='logout.html')
+    pass
+    # return render(request, template_name='logout.html')
 
 
 def dashboard_view(request):
-
-    return render(request, template_name='dashboard.html')
+    pass
+    # return render(request, template_name='dashboard.html')
