@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-
+from django.contrib import auth
 
 def singup_view(request):
 
@@ -33,14 +33,37 @@ def singup_view(request):
 
 def login_view(request):
 
+    if request.method == 'POST':
+
+        email    = request.POST['email']
+        password = request.POST['senha']
+        
+        if email.strip() == '' or password.strip() == '':
+            return redirect(to='login')
+
+        if User.objects.filter(email=email).exists():
+            username = User.objects.filter(email=email).values_list('username', flat=True).get()
+            user     = auth.authenticate(request, username=username, password=password)
+
+            if user is not None:
+                auth.login(request, user)
+                print('login com sucesso')
+
+        return redirect(to='dashboard')
+
     return render(request, template_name='users/login.html')
 
 
 def logout_view(request):
-    pass
-    # return render(request, template_name='logout.html')
+    
+    auth.logout(request)
+    return redirect(to='index')
+
 
 
 def dashboard_view(request):
-    pass
-    # return render(request, template_name='dashboard.html')
+
+    if request.user.is_authenticated:
+        return render(request, template_name='users/dashboard.html')
+    else:
+        return redirect(to='index')
