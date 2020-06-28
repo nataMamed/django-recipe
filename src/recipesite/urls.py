@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     #My urls
     path('', include('recipe.urls')),
+    path('users/', include('users.urls')),
     #Default urls
     path('admin/', admin.site.urls),
 

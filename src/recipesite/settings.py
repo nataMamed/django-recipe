@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     #My apps
     'recipe',
     'people',
+    'users',
     #Default apps
     'django.contrib.admin',
     'django.contrib.auth',
