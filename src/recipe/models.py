@@ -13,6 +13,7 @@ class Recipe(models.Model):
     revenue            = models.CharField(max_length=50)
     published          = models.BooleanField(default=False)
     registration_date  = models.DateTimeField(default=datetime.now, blank=True)
+    recipe_photo       = models.ImageField(upload_to='photo/%d/%m/%Y', blank=True)
 
     def __str__(self):
         return self.recipe_name
