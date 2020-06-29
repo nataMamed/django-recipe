@@ -1,6 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib import auth
+from recipe.models import Recipe
+
 
 def singup_view(request):
 
@@ -64,7 +66,14 @@ def logout_view(request):
 def dashboard_view(request):
 
     if request.user.is_authenticated:
-        return render(request, template_name='users/dashboard.html')
+
+        id = request.user.id
+        recipes = Recipe.objects.order_by('-registration_date').filter(person=id)
+
+        data = {
+            'recipes':recipes   
+        }
+        return render(request, template_name='users/dashboard.html', context=data)
     else:
         return redirect(to='index')
 
@@ -78,7 +87,19 @@ def create_recipe_view(request):
         revenue            = request.POST['rendimento']
         category           = request.POST['categoria']
         recipe_photo       = request.FILES['foto_receita']
-       
+
+        user = get_object_or_404(User, pk=request.user.id)
+
+        recipe = Recipe.objects.create(
+            person=user,
+            recipe_name=recipe_name,
+            ingredients=ingredients,
+            preparation_method=preparation_method,
+            preparation_time=preparation_time,
+            revenue=revenue,
+            category=category,
+            recipe_photo=recipe_photo
+        )
         return redirect(to='dashboard')
     else:
         return render(request, template_name='users/create_recipe.html')
