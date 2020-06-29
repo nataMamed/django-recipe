@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from django.contrib import auth
+from django.contrib import auth, messages
 from recipe.models import Recipe
 
 
@@ -14,20 +14,30 @@ def singup_view(request):
         password2 = request.POST['password2']
 
         if not name.strip():
+            messages.error(request, message='O campo nome não pode fica em branco')
             return redirect(to='singup')
 
         if not email.strip():
+            messages.error(request, message='O campo nome não pode fica em branco')
             return redirect(to='singup')
 
         if password != password2:
+
+            messages.error(request, message='As senhas não coincidem!')
             return redirect(to='singup')
         
         if User.objects.filter(email=email).exists():
-            return redirect(to='login')
-        else:
-            user = User.objects.create_user(username=name, email=email, password=password)
-            user.save()
 
+            messages.warning(request, message='Usuário já existente, faça seu login!')
+            return redirect(to='login')
+
+        if User.objects.filter(username=name).exists():
+            messages.warning(request, message='Usuário já existente, faça seu login!')
+            return redirect(to='login')
+
+        user = User.objects.create_user(username=name, email=email, password=password)
+        user.save()
+        messages.success(request, message='Usuário cadastrado com sucesso!')
         return redirect(to='login')
     else:
         return render(request, template_name='users/singup.html')
@@ -41,6 +51,7 @@ def login_view(request):
         password = request.POST['senha']
         
         if email.strip() == '' or password.strip() == '':
+            messages.error(request, message='Os campos email e senha nçao podem fica em branco')
             return redirect(to='login')
 
         if User.objects.filter(email=email).exists():
@@ -49,7 +60,6 @@ def login_view(request):
 
             if user is not None:
                 auth.login(request, user)
-                print('login com sucesso')
 
         return redirect(to='dashboard')
 
