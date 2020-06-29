@@ -70,4 +70,15 @@ def dashboard_view(request):
 
 def create_recipe_view(request):
 
-    return render(request, template_name='users/create_recipe.html')
+    if request.method == 'POST':
+        recipe_name        = request.POST['nome_receita']
+        ingredients        = request.POST['ingredientes']
+        preparation_method = request.POST['modo_preparo']
+        preparation_time   = request.POST['tempo_preparo']
+        revenue            = request.POST['rendimento']
+        category           = request.POST['categoria']
+        recipe_photo       = request.FILES['foto_receita']
+       
+        return redirect(to='dashboard')
+    else:
+        return render(request, template_name='users/create_recipe.html')
