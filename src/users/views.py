@@ -72,7 +72,6 @@ def logout_view(request):
     return redirect(to='index')
 
 
-
 def dashboard_view(request):
 
     if request.user.is_authenticated:
@@ -113,3 +112,42 @@ def create_recipe_view(request):
         return redirect(to='dashboard')
     else:
         return render(request, template_name='users/create_recipe.html')
+
+def delete_recipe(request, recipe_id):
+
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
+    recipe.delete()
+
+    return redirect(to='dashboard')
+
+def update_recipe(request, recipe_id):
+
+
+    recipe  = get_object_or_404(Recipe, pk=recipe_id)
+    context = {
+        'recipe':recipe
+    }
+    
+    return render(request, template_name='users/update_recipe.html', context=context)
+
+def refresh_recipe(request):
+
+    if request.method == 'POST':
+
+        recipe_id = request.POST['receita_id']
+
+        recipe                    = Recipe.objects.get(pk=recipe_id)
+        recipe.recipe_name        = request.POST['nome_receita']
+        recipe.ingredients        = request.POST['ingredientes']
+        recipe.preparation_method = request.POST['modo_preparo']
+        recipe.preparation_time   = request.POST['tempo_preparo']
+        recipe.revenue            = request.POST['rendimento']
+        recipe.category           = request.POST['categoria']
+
+        if 'foto_receita' in request.FILES:
+            recipe.recipe_photo = request.FILES['foto_receita']
+
+        recipe.save()
+        return redirect(to='dashboard')
+
+
