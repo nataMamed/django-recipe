@@ -9,6 +9,6 @@ class ListingRecipes(admin.ModelAdmin):
     search_fields      = ('recipe_name',)
     list_editable      = ('published',)
     list_filter        = ('category',)
-    list_per_page      = 2
+    list_per_page      = 5
 
 admin.site.register(Recipe, ListingRecipes)

@@ -65,13 +65,10 @@ def login_view(request):
 
     return render(request, template_name='users/login.html')
 
-
 def logout_view(request):
     
     auth.logout(request)
     return redirect(to='index')
-
-
 
 def dashboard_view(request):
 
@@ -87,29 +84,9 @@ def dashboard_view(request):
     else:
         return redirect(to='index')
 
-def create_recipe_view(request):
 
-    if request.method == 'POST':
-        recipe_name        = request.POST['nome_receita']
-        ingredients        = request.POST['ingredientes']
-        preparation_method = request.POST['modo_preparo']
-        preparation_time   = request.POST['tempo_preparo']
-        revenue            = request.POST['rendimento']
-        category           = request.POST['categoria']
-        recipe_photo       = request.FILES['foto_receita']
 
-        user = get_object_or_404(User, pk=request.user.id)
-
-        recipe = Recipe.objects.create(
-            person=user,
-            recipe_name=recipe_name,
-            ingredients=ingredients,
-            preparation_method=preparation_method,
-            preparation_time=preparation_time,
-            revenue=revenue,
-            category=category,
-            recipe_photo=recipe_photo
-        )
+        recipe.save()
         return redirect(to='dashboard')
-    else:
-        return render(request, template_name='users/create_recipe.html')
+
+
